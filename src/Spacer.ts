@@ -30,17 +30,30 @@ SOFTWARE.
 
 
 class _ {
-    element: HTMLElement | null;
-    nodelist: Array<HTMLElement> | NodeList | null;
+    public element: HTMLElement | null;
+    public nodelist: Array<HTMLElement|Node> | NodeList | null;
 
     /**
      * Selects a HTML Element
      * @param {string} selector QuerySelector string
      */
 
-    constructor(selector: string) {
+    constructor(selector: string, contents?: string, strict?: boolean) {
         this.element = document.querySelector(selector) || null;  
         this.nodelist = [] || null;
+
+        // check for specific contents in an element
+        if(contents) {
+            let elements = document.querySelectorAll(selector);
+            if(strict == undefined) strict = false;
+            if(strict == false) {
+                this.nodelist = [...elements].filter(e => e.innerHTML.includes(contents));
+            }else{
+                this.nodelist = [...elements].filter(e => e.innerHTML == contents);
+            };
+            
+        };
+        
     };
 
     /**
@@ -57,99 +70,125 @@ class _ {
     /**
      * Appends the child element to a parent element
      * @param {string} parent Selector string
-     * @returns HTML Element or null
      */
 
     appendTo(parent: string) {
-        return this.element ? document.querySelector(parent)?.appendChild(this.element): null;
+        this.element ? document.querySelector(parent)?.appendChild(this.element): null;
+        return this;
     }
 
     /**
      * Appends the a string to a parent element
      * @param {string} parent Selector string
-     * @returns HTML Element or null
      */
 
     append(str: string) {
-        return this.element?.append(str);
+        this.element?.append(str);
+        return this;
     }
 
     /**
      * Appends the a string to the selected element innerHTML
      * @param {string} str String to be inserted in the innerHTML
-     * @returns HTML Element or null
      */
 
     iHTML(str: string) {
-        return this.element ? this.element.innerHTML += str : null;
+        this.element ? this.element.innerHTML += str : null;
+        return this;
     }
 
     /**
      * Appends the a string to the selected element innerText
      * @param {string} str String to be inserted in the innerText
-     * @returns HTML Element or null
      */
 
     iText(str: string) {
-        return this.element ? this.element.innerText += str : null;
+        this.element ? this.element.innerText += str : null;
+        return this;
     }
 
     /**
      * Clicks the element
-     * @returns HTMLElement
      */
 
     click() {
-        return this.element ? this.element.click() : null;
+        this.element ? this.element.click() : null;
+        return this;
     }
 
     /**
      * Focuses the element
-     * @returns HTMLElement or null
      */
 
     focus() {
-        return this.element ? this.element.focus() : null;
+        this.element ? this.element.focus() : null;
+        return this;
     }
+
+    /**
+     * Removes focus from the element
+     */
+
+    unfocus() {
+        this.element ? this.element.blur() : null;
+        return this;
+    };
 
     /**
      * Sets the element's title
-     * @returns HTMLElement or null
      */
 
     setTitle(str: string) {
-        return this.element ? this.element.title = str : null;
+        this.element ? this.element.title = str : null;
+        return this;
     }
 
     /**
-     * Attaches onclick event listener 
-     * @param {Function} cb Callback function on event
-     * @returns HTMLElement or null
+     * Scrolls the element into view
+     * @param {boolean} [alignTo] True or false, true lines up element to the top of the screen
      */
 
-    onclick(cb: Function) {
-        return this.element ? this.element.addEventListener("click", cb()) : null;
+    sToView(alignTo?: boolean) {
+        this.element ? (alignTo ? this.element.scrollIntoView(alignTo) : this.element.scrollIntoView()) : null;
+        return this;
     }
 
     /**
-     * Attaches onsubmit event listener 
-     * @param {Function} cb Callback function on event
-     * @returns HTMLElement or null
+     * Returns an HTML Element into a string
+     * @returns String or null
      */
 
-    onsubmit(cb: Function) {
-        return this.element ? this.element.addEventListener("submit", cb()): null;
+    toStr() {
+        return this.element ? this.element.toString() : null;
     }
 
     /**
-     * Attaches mouseover event listener 
-     * @param {Function} cb Callback function on event
-     * @returns HTMLElement or null
+     * Checks if the element contains a Node
+     * @param {Node} node HTML Node to check for
+     * @returns Boolean
      */
 
-    onhover(cb: Function) {
-        return this.element ? this.element.addEventListener("mouseover", cb()): null;
+    contains(node: Node) {
+        return this.element ? this.element.contains(node) : null;
     }
 
+    /**
+     * Clones the element
+     * @param {boolean} [deep] Keep child elements
+     */
 
+    clone(deep?: boolean) {
+        this.element ? (deep ? this.element.cloneNode(deep) : this.element.cloneNode()) : null;
+        return this;
+    }
+
+    /**
+     * Checks if the element has an certain attribute
+     * @param {string} attribute 
+     * @returns Boolean
+     */
+
+    hasAttr(attribute: string) {
+        return this.element ? this.element.hasAttribute(attribute) : null;
+    }
 }
