@@ -2,7 +2,9 @@
 
 This is not documentation.
 
-Read the documentation for more help.
+Read the [documentation](https://ksplatdev.github.io/SpacerJS/-_.html) for more help.
+
+
 
 ## Selecting Elements
 
