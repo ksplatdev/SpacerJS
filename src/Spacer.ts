@@ -109,7 +109,7 @@ function _(
 
 	// check for specific contents in an element
 	if (contents) {
-		let elements = document.querySelectorAll(selector);
+		let elements: any = document.querySelectorAll(selector);
 		if (strict == undefined) strict = true;
 		if (strict == false) {
 			nodelist = [...elements].filter((e) =>

@@ -35,3 +35,8 @@
 -   -   Added .editorconfig
 -   -   Tweaked tsconfig.json
 -   -   Rebuilt Docs
+
+### 1.1.1
+
+-   Made elements node list spreader be type any for false error fix
+-   Rebuilt docs
