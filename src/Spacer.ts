@@ -57,11 +57,13 @@ interface _Methods {
  * @param {boolean} [strict] If true, the contents must match the text exactly
  * @public
  * @license MIT
+ * @namespace
  */
 
 function _(selector: string, create: boolean, contents?: string, strict?: boolean) {
     let element: HTMLElement | null = document.querySelector(selector) || null; 
     let nodelist: Array<HTMLElement|Node> | NodeList | null = [] || null;
+
     const methods: _Methods = {
         __,
         append,
