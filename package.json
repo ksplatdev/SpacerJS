@@ -1,11 +1,9 @@
 {
   "name": "spacerjs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Manipulate the DOM easily",
-  "main": "src/Spacer.ts",
-  "scripts": {
-    "test": "node build/Spacer.js"
-  },
+  "main": "build/Spacer.js",
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ksplatdev/SpacerJS.git"
