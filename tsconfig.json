@@ -4,8 +4,7 @@
     "removeComments": false,
     "noImplicitAny": true,  
     "outDir": "build",
-    "strict": true,
-    "declaration": true
+    "strict": true
   },
   "files": [
     "src/Spacer.ts"

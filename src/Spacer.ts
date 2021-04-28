@@ -46,7 +46,8 @@ interface _Methods {
     clone: Function,
     hasAttr: Function,
     attr: Function,
-    kill: Function
+    kill: Function,
+    element: HTMLElement | Node | null
 }
 
 /**
@@ -82,7 +83,8 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
         clone,
         hasAttr,
         attr,
-        kill
+        kill,
+        element
     };
 
     // create element
