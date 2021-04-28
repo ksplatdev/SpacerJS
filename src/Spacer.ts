@@ -49,6 +49,16 @@ interface _Methods {
     kill: Function
 }
 
+/**
+ * @description SpacerJS, finds/creates an element
+ * @param {string} selector A valid selector
+ * @param {boolean} [create] Boolean to create an element or not
+ * @param {string} [contents] Contents to find element by
+ * @param {boolean} [strict] If true, the contents must match the text exactly
+ * @public
+ * @license MIT
+ */
+
 function _(selector: string, create: boolean, contents?: string, strict?: boolean) {
     let element: HTMLElement | null = document.querySelector(selector) || null; 
     let nodelist: Array<HTMLElement|Node> | NodeList | null = [] || null;
@@ -91,7 +101,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     };
 
     /**
-     * Selects and returns a NodeList 
+     * @description Selects and returns a NodeList 
      * @param {string} selector QuerySelectorAll string
      * @returns NodeList
      */
@@ -102,7 +112,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends the child element to a parent element
+     * @description Appends the child element to a parent element
      * @param {string} parent Selector string
      */
 
@@ -112,7 +122,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends the a Node or string to a parent element
+     * @description Appends the a Node or string to a parent element
      * @param {Node|String} parent Selector string
      */
 
@@ -122,7 +132,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends a child element
+     * @description Appends a child element
      * @param {HTMLElement} child 
      */
 
@@ -132,7 +142,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends a list of HTML Elements
+     * @description Appends a list of HTML Elements
      * @param {Array<HTMLElement>} elementlist 
      */
 
@@ -144,7 +154,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends the a string to the selected element innerHTML
+     * @description Appends the a string to the selected element innerHTML
      * @param {string} str String to be inserted in the innerHTML
      */
 
@@ -154,7 +164,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Appends the a string to the selected element innerText
+     * @description Appends the a string to the selected element innerText
      * @param {string} str String to be inserted in the innerText
      */
 
@@ -164,7 +174,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Clicks the element
+     * @description Clicks the element
      */
 
     function click() {
@@ -173,7 +183,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Focuses the element
+     * @description Focuses the element
      */
 
     function focus() {
@@ -182,7 +192,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Removes focus from the element
+     * @description Removes focus from the element
      */
 
     function unfocus() {
@@ -191,7 +201,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     };
 
     /**
-     * Sets the element's title
+     * @description Sets the element's title
      */
 
     function setTitle(str: string) {
@@ -200,7 +210,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Scrolls the element into view
+     * @description Scrolls the element into view
      * @param {boolean} [alignTo] True or false, true lines up element to the top of the screen
      */
 
@@ -210,7 +220,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Returns an HTML Element into a string
+     * @description Returns an HTML Element into a string
      * @returns String or null
      */
 
@@ -220,7 +230,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Checks if the element contains a Node
+     * @description Checks if the element contains a Node
      * @param {Node} node HTML Node to check for
      * @returns Boolean
      */
@@ -231,7 +241,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Clones the element
+     * @description Clones the element
      * @param {boolean} [keepChildren] Keep child elements
      * @returns Cloned Node
      */
@@ -242,7 +252,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Checks if the element has an certain attribute
+     * @description Checks if the element has an certain attribute
      * @param {string} attribute 
      * @returns Boolean
      */
@@ -252,7 +262,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Sets/Creates a attribute to a value
+     * @description Sets/Creates a attribute to a value
      * @param {string} attribute 
      * @param {string} value 
      */
@@ -263,7 +273,7 @@ function _(selector: string, create: boolean, contents?: string, strict?: boolea
     }
 
     /**
-     * Removes the element
+     * @description Removes the element
      */
 
     function kill() {

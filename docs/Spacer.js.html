@@ -55,6 +55,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 */
+/**
+ * @description SpacerJS, finds/creates an element
+ * @param {string} selector A valid selector
+ * @param {boolean} [create] Boolean to create an element or not
+ * @param {string} [contents] Contents to find element by
+ * @param {boolean} [strict] If true, the contents must match the text exactly
+ * @public
+ * @license MIT
+ */
 function _(selector, create, contents, strict) {
     let element = document.querySelector(selector) || null;
     let nodelist = [] || null;
@@ -98,7 +107,7 @@ function _(selector, create, contents, strict) {
     }
     ;
     /**
-     * Selects and returns a NodeList
+     * @description Selects and returns a NodeList
      * @param {string} selector QuerySelectorAll string
      * @returns NodeList
      */
@@ -107,7 +116,7 @@ function _(selector, create, contents, strict) {
         return nodelist;
     }
     /**
-     * Appends the child element to a parent element
+     * @description Appends the child element to a parent element
      * @param {string} parent Selector string
      */
     function appendTo(parent) {
@@ -116,7 +125,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Appends the a Node or string to a parent element
+     * @description Appends the a Node or string to a parent element
      * @param {Node|String} parent Selector string
      */
     function append(str) {
@@ -124,7 +133,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Appends a child element
+     * @description Appends a child element
      * @param {HTMLElement} child
      */
     function appendChild(child) {
@@ -132,7 +141,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Appends a list of HTML Elements
+     * @description Appends a list of HTML Elements
      * @param {Array&lt;HTMLElement>} elementlist
      */
     function appendList(elementlist) {
@@ -142,7 +151,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Appends the a string to the selected element innerHTML
+     * @description Appends the a string to the selected element innerHTML
      * @param {string} str String to be inserted in the innerHTML
      */
     function iHTML(str) {
@@ -150,7 +159,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Appends the a string to the selected element innerText
+     * @description Appends the a string to the selected element innerText
      * @param {string} str String to be inserted in the innerText
      */
     function iText(str) {
@@ -158,21 +167,21 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Clicks the element
+     * @description Clicks the element
      */
     function click() {
         element ? element.click() : null;
         return methods;
     }
     /**
-     * Focuses the element
+     * @description Focuses the element
      */
     function focus() {
         element ? element.focus() : null;
         return methods;
     }
     /**
-     * Removes focus from the element
+     * @description Removes focus from the element
      */
     function unfocus() {
         element ? element.blur() : null;
@@ -180,14 +189,14 @@ function _(selector, create, contents, strict) {
     }
     ;
     /**
-     * Sets the element's title
+     * @description Sets the element's title
      */
     function setTitle(str) {
         element ? element.title = str : null;
         return methods;
     }
     /**
-     * Scrolls the element into view
+     * @description Scrolls the element into view
      * @param {boolean} [alignTo] True or false, true lines up element to the top of the screen
      */
     function sToView(alignTo) {
@@ -195,7 +204,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Returns an HTML Element into a string
+     * @description Returns an HTML Element into a string
      * @returns String or null
      */
     function toStr() {
@@ -203,7 +212,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Checks if the element contains a Node
+     * @description Checks if the element contains a Node
      * @param {Node} node HTML Node to check for
      * @returns Boolean
      */
@@ -212,7 +221,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Clones the element
+     * @description Clones the element
      * @param {boolean} [keepChildren] Keep child elements
      * @returns Cloned Node
      */
@@ -221,7 +230,7 @@ function _(selector, create, contents, strict) {
         return clone;
     }
     /**
-     * Checks if the element has an certain attribute
+     * @description Checks if the element has an certain attribute
      * @param {string} attribute
      * @returns Boolean
      */
@@ -229,7 +238,7 @@ function _(selector, create, contents, strict) {
         return element ? element.hasAttribute(attribute) : null;
     }
     /**
-     * Sets/Creates a attribute to a value
+     * @description Sets/Creates a attribute to a value
      * @param {string} attribute
      * @param {string} value
      */
@@ -238,7 +247,7 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
-     * Removes the element
+     * @description Removes the element
      */
     function kill() {
         element === null || element === void 0 ? void 0 : element.remove();
@@ -264,13 +273,13 @@ let storage = localStorage;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li><li><a href="global.html#storage">storage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#_">_</a></li><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li><li><a href="global.html#storage">storage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Apr 27 2021 21:02:53 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Apr 27 2021 21:08:48 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
