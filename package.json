@@ -1,27 +1,27 @@
 {
-  "name": "spacerjs",
-  "version": "1.0.2",
-  "description": "Manipulate the DOM easily",
-  "main": "build/Spacer.js",
-  "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ksplatdev/SpacerJS.git"
-  },
-  "keywords": [
-    "DOM",
-    "Manipulation",
-    "js",
-    "ts",
-    "lightweight"
-  ],
-  "author": "Bleart Emini",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ksplatdev/SpacerJS/issues"
-  },
-  "homepage": "https://github.com/ksplatdev/SpacerJS#readme",
-  "devDependencies": {
-    "typescript": "^4.2.4"
-  }
+	"name": "spacerjs",
+	"version": "1.1.0",
+	"description": "Manipulate the DOM easily",
+	"main": "build/Spacer.js",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ksplatdev/SpacerJS.git"
+	},
+	"keywords": [
+		"DOM",
+		"Manipulation",
+		"js",
+		"ts",
+		"lightweight"
+	],
+	"author": "Bleart Emini",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ksplatdev/SpacerJS/issues"
+	},
+	"homepage": "https://github.com/ksplatdev/SpacerJS#readme",
+	"devDependencies": {
+		"typescript": "^4.2.4"
+	}
 }

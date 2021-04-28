@@ -1,16 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "removeComments": false,
-    "noImplicitAny": true,  
-    "outDir": "build",
-    "strict": true
-  },
-  "files": [
-    "src/Spacer.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+	"compilerOptions": {
+		"target": "es6",
+		"removeComments": false,
+		"noImplicitAny": true,
+		"outDir": "build",
+		"strict": true
+	},
+	"files": ["src/Spacer.ts"],
+	"exclude": ["node_modules", "build"]
 }

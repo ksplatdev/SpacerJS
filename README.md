@@ -39,14 +39,15 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 #### Production
 
 1. Copy paste the following script tag in the body or with the defer attribute
-   
-   `<script src="https://cdn.jsdelivr.net/npm/spacerjs@1.0.2/build/Spacer.min.js"></script>`
-2. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
 
+    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@1.0.2/build/Spacer.min.js"></script>`
+
+2. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
 
 #### Development
 
 1. Copy paste the following script tag in the body or with the defer attribute
-   
-   `<script src="https://cdn.jsdelivr.net/npm/spacerjs@1.0.2/build/Spacer.js"></script>`
+
+    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@1.0.2/build/Spacer.js"></script>`
+
 2. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
