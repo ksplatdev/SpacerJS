@@ -1,8 +1,11 @@
-var myElem = new _("#test").append("Hello, ").iHTML(" <b>World!</b>");
-var myButton = new _("button").setTitle("A button");
+var myElem = _("#test").append("Hello, ").iHTML(" <b>World!</b>");
+var myButton = _("button").setTitle("A button");
 
-var containsText = new _("span", "Testing contains ", false);
+var containsText = _("span", false, "Testing contains ", false);
 
 if(myElem.contains(myButton.element)) {
-    console.log("true")
+    console.log("true");
+    let clone = myElem.clone(true);
+    clone.id = "cloned";
+    body.append(clone);
 }

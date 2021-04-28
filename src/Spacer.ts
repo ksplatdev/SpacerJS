@@ -28,32 +28,66 @@ SOFTWARE.
 */
 
 
+interface _Methods {
+    __: Function,
+    append: Function,
+    appendTo: Function,
+    appendChild: Function,
+    appendList: Function,
+    iHTML: Function,
+    iText: Function,
+    click: Function,
+    focus: Function,
+    unfocus: Function,
+    setTitle: Function,
+    sToView: Function,
+    toStr: Function,
+    contains: Function,
+    clone: Function,
+    hasAttr: Function,
+    attr: Function,
+    kill: Function
+}
 
-class _ {
-    public element: HTMLElement | null;
-    public nodelist: Array<HTMLElement|Node> | NodeList | null;
+function _(selector: string, create: boolean, contents?: string, strict?: boolean) {
+    let element: HTMLElement | null = document.querySelector(selector) || null; 
+    let nodelist: Array<HTMLElement|Node> | NodeList | null = [] || null;
+    const methods: _Methods = {
+        __,
+        append,
+        appendTo,
+        appendChild,
+        appendList,
+        iHTML,
+        iText,
+        click,
+        focus,
+        unfocus,
+        setTitle,
+        sToView,
+        toStr,
+        contains,
+        clone,
+        hasAttr,
+        attr,
+        kill
+    };
 
-    /**
-     * Selects a HTML Element
-     * @param {string} selector QuerySelector string
-     */
+    // create element
 
-    constructor(selector: string, contents?: string, strict?: boolean) {
-        this.element = document.querySelector(selector) || null;  
-        this.nodelist = [] || null;
+    if(create) {
+        element = document.createElement(selector);
+    };
 
-        // check for specific contents in an element
-        if(contents) {
-            let elements = document.querySelectorAll(selector);
-            if(strict == undefined) strict = false;
-            if(strict == false) {
-                this.nodelist = [...elements].filter(e => e.innerHTML.includes(contents));
-            }else{
-                this.nodelist = [...elements].filter(e => e.innerHTML == contents);
-            };
-            
+    // check for specific contents in an element
+    if(contents) {
+        let elements = document.querySelectorAll(selector);
+        if(strict == undefined) strict = true;
+        if(strict == false) {
+            nodelist = [...elements].filter(e => e.innerHTML.includes(contents));
+        }else{
+            nodelist = [...elements].filter(e => e.innerHTML == contents);
         };
-        
     };
 
     /**
@@ -62,9 +96,9 @@ class _ {
      * @returns NodeList
      */
 
-    __(selector: string) {
-        this.nodelist = document.querySelectorAll(selector) || null;
-        return this.nodelist;
+    function __(selector: string) {
+        nodelist = document.querySelectorAll(selector) || null;
+        return nodelist;
     }
 
     /**
@@ -72,19 +106,41 @@ class _ {
      * @param {string} parent Selector string
      */
 
-    appendTo(parent: string) {
-        this.element ? document.querySelector(parent)?.appendChild(this.element): null;
-        return this;
+    function appendTo(parent: string) {
+        element ? document.querySelector(parent)?.appendChild(element): null;
+        return methods;
     }
 
     /**
-     * Appends the a string to a parent element
-     * @param {string} parent Selector string
+     * Appends the a Node or string to a parent element
+     * @param {Node|String} parent Selector string
      */
 
-    append(str: string) {
-        this.element?.append(str);
-        return this;
+    function append(str: Node | string) {
+        element?.append(str);
+        return methods;
+    }
+
+    /**
+     * Appends a child element
+     * @param {HTMLElement} child 
+     */
+
+    function appendChild(child: HTMLElement) {
+        element ? element.appendChild(child) : null;
+        return methods;
+    }
+
+    /**
+     * Appends a list of HTML Elements
+     * @param {Array<HTMLElement>} elementlist 
+     */
+
+    function appendList(elementlist: Array<HTMLElement|Element|Node>) {
+        elementlist.forEach(element => {
+            element ? element.appendChild(element) : null;
+        });
+        return methods;
     }
 
     /**
@@ -92,9 +148,9 @@ class _ {
      * @param {string} str String to be inserted in the innerHTML
      */
 
-    iHTML(str: string) {
-        this.element ? this.element.innerHTML += str : null;
-        return this;
+    function iHTML(str: string) {
+        element ? element.innerHTML += str : null;
+        return methods;
     }
 
     /**
@@ -102,45 +158,45 @@ class _ {
      * @param {string} str String to be inserted in the innerText
      */
 
-    iText(str: string) {
-        this.element ? this.element.innerText += str : null;
-        return this;
+    function iText(str: string) {
+        element ? element.innerText += str : null;
+        return methods;
     }
 
     /**
      * Clicks the element
      */
 
-    click() {
-        this.element ? this.element.click() : null;
-        return this;
+    function click() {
+        element ? element.click() : null;
+        return methods;
     }
 
     /**
      * Focuses the element
      */
 
-    focus() {
-        this.element ? this.element.focus() : null;
-        return this;
+    function focus() {
+        element ? element.focus() : null;
+        return methods;
     }
 
     /**
      * Removes focus from the element
      */
 
-    unfocus() {
-        this.element ? this.element.blur() : null;
-        return this;
+    function unfocus() {
+        element ? element.blur() : null;
+        return methods;
     };
 
     /**
      * Sets the element's title
      */
 
-    setTitle(str: string) {
-        this.element ? this.element.title = str : null;
-        return this;
+    function setTitle(str: string) {
+        element ? element.title = str : null;
+        return methods;
     }
 
     /**
@@ -148,9 +204,9 @@ class _ {
      * @param {boolean} [alignTo] True or false, true lines up element to the top of the screen
      */
 
-    sToView(alignTo?: boolean) {
-        this.element ? (alignTo ? this.element.scrollIntoView(alignTo) : this.element.scrollIntoView()) : null;
-        return this;
+    function sToView(alignTo?: boolean) {
+        element ? (alignTo ? element.scrollIntoView(alignTo) : element.scrollIntoView()) : null;
+        return methods;
     }
 
     /**
@@ -158,8 +214,9 @@ class _ {
      * @returns String or null
      */
 
-    toStr() {
-        return this.element ? this.element.toString() : null;
+    function toStr() {
+        return element ? element.toString() : null;
+        return methods;
     }
 
     /**
@@ -168,18 +225,20 @@ class _ {
      * @returns Boolean
      */
 
-    contains(node: Node) {
-        return this.element ? this.element.contains(node) : null;
+    function contains(node: Node) {
+        return element ? element.contains(node) : null;
+        return methods;
     }
 
     /**
      * Clones the element
-     * @param {boolean} [deep] Keep child elements
+     * @param {boolean} [keepChildren] Keep child elements
+     * @returns Cloned Node
      */
 
-    clone(deep?: boolean) {
-        this.element ? (deep ? this.element.cloneNode(deep) : this.element.cloneNode()) : null;
-        return this;
+    function clone(keepChildren?: boolean) {
+        let clone: any = keepChildren ? element?.cloneNode(keepChildren) : element?.cloneNode();
+        return clone;
     }
 
     /**
@@ -188,7 +247,47 @@ class _ {
      * @returns Boolean
      */
 
-    hasAttr(attribute: string) {
-        return this.element ? this.element.hasAttribute(attribute) : null;
+    function hasAttr(attribute: string) {
+        return element ? element.hasAttribute(attribute) : null;
     }
+
+    /**
+     * Sets/Creates a attribute to a value
+     * @param {string} attribute 
+     * @param {string} value 
+     */
+
+    function attr(attribute: string, value: string) {
+        element?.setAttribute(attribute, value);
+        return methods;
+    }
+
+    /**
+     * Removes the element
+     */
+
+    function kill() {
+        element?.remove();
+        return methods;
+    }
+
+
+    return methods;
 }
+
+//#region ease of access variables
+
+/**Body Element @type {HTMLElement} */
+let body = document.body;
+
+/**Head Element @type {HTMLElement} */
+let head = document.head;
+
+/**localStorage */
+let storage = localStorage;
+
+//#endregion EOA Variables
+
+
+
+
