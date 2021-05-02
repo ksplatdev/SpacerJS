@@ -33,8 +33,8 @@ interface _Methods {
 	appendTo: Function;
 	appendChild: Function;
 	appendList: Function;
-	iHTML: Function;
-	iText: Function;
+	html: Function;
+	text: Function;
 	click: Function;
 	focus: Function;
 	unfocus: Function;
@@ -52,6 +52,23 @@ interface _Methods {
 	removeChild: Function;
 	replaceChild: Function;
 	element: HTMLElement | Node | null;
+	meta: object;
+	setMeta: Function;
+	show: Function;
+	hide: Function;
+	on: Function;
+	addClass: Function;
+	removeClass: Function;
+	children: Function;
+	dbclick: Function;
+	sleep: Function;
+	keydown: Function;
+	keyup: Function;
+	debug: Function;
+}
+
+interface _Meta {
+	hiddenClass?: string;
 }
 
 /**
@@ -73,6 +90,7 @@ function _(
 ) {
 	let element: HTMLElement | null = document.querySelector(selector) || null;
 	let nodelist: Array<HTMLElement | Node> | NodeList | null = [] || null;
+	let meta: _Meta = {};
 
 	const methods: _Methods = {
 		__,
@@ -80,8 +98,8 @@ function _(
 		appendTo,
 		appendChild,
 		appendList,
-		iHTML,
-		iText,
+		html,
+		text,
 		click,
 		focus,
 		unfocus,
@@ -98,7 +116,20 @@ function _(
 		normalize,
 		removeChild,
 		replaceChild,
+		setMeta,
+		show,
+		hide,
+		on,
+		addClass,
+		removeClass,
+		children,
+		dbclick,
+		sleep,
+		keydown,
+		keyup,
+		debug,
 		element,
+		meta,
 	};
 
 	// create element
@@ -178,7 +209,7 @@ function _(
 	 * @param {string} str String to be inserted in the innerHTML
 	 */
 
-	function iHTML(str: string) {
+	function html(str: string) {
 		element ? (element.innerHTML += str) : null;
 		return methods;
 	}
@@ -188,7 +219,7 @@ function _(
 	 * @param {string} str String to be inserted in the innerText
 	 */
 
-	function iText(str: string) {
+	function text(str: string) {
 		element ? (element.innerText += str) : null;
 		return methods;
 	}
@@ -199,6 +230,16 @@ function _(
 
 	function click() {
 		element ? element.click() : null;
+		return methods;
+	}
+
+	/**
+	 * @description Clicks the element twice
+	 */
+
+	function dbclick() {
+		element?.click();
+		element?.click();
 		return methods;
 	}
 
@@ -349,6 +390,110 @@ function _(
 		oldChild: HTMLElement | Node
 	) {
 		element?.replaceChild(newChild, oldChild);
+		return methods;
+	}
+
+	/**
+	 * @description Sets the "metadata" of a element for showing passed classes, and other methods
+	 * @param {object} obj
+	 * @param {string} [obj.hiddenClass]
+	 */
+
+	function setMeta(obj: _Meta) {
+		meta = obj;
+		return methods;
+	}
+
+	/**
+	 * @description Removes the hidden class that was set with setMeta()
+	 */
+
+	function show() {
+		meta.hiddenClass ? element?.classList.remove(meta.hiddenClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Adds the hidden class that was set with setMeta()
+	 */
+
+	function hide() {
+		meta.hiddenClass ? element?.classList.add(meta.hiddenClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Sets on event listener and runs cb on event
+	 * @param {string|any} event
+	 * @param {Function} cb
+	 */
+
+	function on(event: any, cb: Function) {
+		element?.addEventListener(event, cb());
+		return methods;
+	}
+
+	/**
+	 * @description Adds a class to the element
+	 * @param {string} className
+	 */
+
+	function addClass(className: string) {
+		element?.classList.add(className);
+		return methods;
+	}
+
+	/**
+	 * @description Removes a class from the element
+	 * @param {string} className
+	 */
+
+	function removeClass(className: string) {
+		element?.classList.remove(className);
+		return methods;
+	}
+
+	/**
+	 * @description Returns NodeList<ChildNode>
+	 * @returns NodeList
+	 */
+
+	function children() {
+		return element?.childNodes;
+	}
+
+	/**
+	 * @description Sleep promise
+	 * @param {number} ms
+	 * @returns Promise<number>
+	 */
+
+	function sleep(ms: number): Promise<number> {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+
+	/**
+	 * @description Listens for the keydown event
+	 * @param {Function} cb
+	 */
+
+	function keydown(cb: Function) {
+		element?.addEventListener('keydown', cb());
+		return methods;
+	}
+
+	/**
+	 * @description Listens for the keyup event
+	 * @param {Function} cb
+	 */
+
+	function keyup(cb: Function) {
+		element?.addEventListener('keydown', cb());
+		return methods;
+	}
+
+	function debug(...args: any) {
+		console.log(...args);
 		return methods;
 	}
 

@@ -40,3 +40,41 @@
 
 -   Made elements node list spreader be type any for false error fix
 -   Rebuilt docs
+
+### 1.2.0
+
+-   **Changed Methods**
+
+    -   Changed iHtml => html
+    -   Changed iText => text
+
+-   **New Methods**
+
+    -   **Chainable**
+        -   Added setMeta(obj)
+        -   Added show()
+        -   Added hide()
+        -   Added on(event, cb)
+        -   Added addClass(className)
+        -   Added removeClass(className)
+        -   Added dbclick()
+        -   Added sleep(ms): Promise
+        -   Added keydown(cb) listener
+        -   Added keyup(cb) listener
+        -   Added debug(...args) which console logs args
+    -   **Non-Chainable**
+        -   Added children(): NodeList of ChildNodes
+
+-   **New Returns**
+
+    -   myElement.meta
+
+-   **Misc**
+    -   Rebuilt docs
+    -   Updated examples
+    -   Changed .gitignore
+    -   Updated Readme.md
+    -   Updated package.json
+    -   Rebuilt src
+    -   Prettified test.html
+    -   Updated test.js
