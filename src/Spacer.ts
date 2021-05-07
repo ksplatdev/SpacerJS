@@ -65,10 +65,19 @@ interface _Methods {
 	keydown: Function;
 	keyup: Function;
 	debug: Function;
+	hover: Function;
+	unhover: Function;
+	active: Function;
+	unactive: Function;
+	css: Function;
+	removeChildren: Function;
+	empty: Function;
 }
 
 interface _Meta {
 	hiddenClass?: string;
+	hoverClass?: string;
+	activeClass?: string;
 }
 
 /**
@@ -84,7 +93,7 @@ interface _Meta {
 
 function _(
 	selector: string,
-	create: boolean,
+	create?: boolean,
 	contents?: string,
 	strict?: boolean
 ) {
@@ -128,6 +137,13 @@ function _(
 		keydown,
 		keyup,
 		debug,
+		hover,
+		unhover,
+		active,
+		unactive,
+		css,
+		removeChildren,
+		empty,
 		element,
 		meta,
 	};
@@ -397,6 +413,8 @@ function _(
 	 * @description Sets the "metadata" of a element for showing passed classes, and other methods
 	 * @param {object} obj
 	 * @param {string} [obj.hiddenClass]
+	 * @param {string} [obj.hoverClass]
+	 * @param {string} [obj.activeClass]
 	 */
 
 	function setMeta(obj: _Meta) {
@@ -424,12 +442,21 @@ function _(
 
 	/**
 	 * @description Sets on event listener and runs cb on event
-	 * @param {string|any} event
-	 * @param {Function} cb
+	 * @param {string} event One event or multiple events seperated by one space
+	 * @param {(ev?: Event) => any | Array<Function>} cb A callback function or an array of callback functions that will be called by their index of events
 	 */
 
-	function on(event: any, cb: Function) {
-		element?.addEventListener(event, cb());
+	function on(event: string, cb: (ev?: Event) => any | Array<Function>) {
+		let eventArr = event.split(' ');
+
+		eventArr.forEach((value, index) => {
+			if (Array.isArray(cb)) {
+				element?.addEventListener(value, cb[index]);
+			} else {
+				element?.addEventListener(value, cb);
+			}
+		});
+
 		return methods;
 	}
 
@@ -492,8 +519,94 @@ function _(
 		return methods;
 	}
 
+	/**
+	 * @description Console logs any arguments
+	 * @param {...any} args
+	 */
+
 	function debug(...args: any) {
 		console.log(...args);
+		return methods;
+	}
+
+	/**
+	 * @description Adds the hoverClass that was set with setMeta(metaObj)
+	 */
+
+	function hover() {
+		meta.hoverClass ? element?.classList.add(meta.hoverClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Adds the hoverClass that was set with setMeta(metaObj)
+	 */
+
+	function unhover() {
+		meta.hoverClass ? element?.classList.remove(meta.hoverClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Adds the activeClass that was set with setMeta(metaObj)
+	 */
+
+	function active() {
+		meta.activeClass ? element?.classList.add(meta.activeClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Adds the activeClass that was set with setMeta(metaObj)
+	 */
+
+	function unactive() {
+		meta.activeClass ? element?.classList.remove(meta.activeClass) : null;
+		return methods;
+	}
+
+	/**
+	 * @description Retuns computedStyle of element
+	 * @param {string} [pseudoElement]
+	 * @returns CSSStyleDeclaration | null
+	 */
+
+	function css(pseudoElement?: string): CSSStyleDeclaration | null {
+		let returned = null;
+		element
+			? pseudoElement
+				? (returned = getComputedStyle(element, pseudoElement))
+				: (returned = getComputedStyle(element))
+			: (returned = null);
+		return returned;
+	}
+
+	/**
+	 * @description Removes all empty child nodes
+	 */
+
+	function empty() {
+		if (element?.hasChildNodes()) {
+			for (let i = 0; i < element?.children.length; i++) {
+				let htmlstring = element?.children[i].innerHTML;
+				htmlstring = htmlstring.trim
+					? htmlstring.trim()
+					: htmlstring.replace(/^\s+/, '');
+				if (htmlstring == '') {
+					element?.children[i].remove();
+				}
+			}
+		}
+	}
+
+	/**
+	 * @description Removes all child nodes
+	 */
+
+	function removeChildren() {
+		while (element?.firstChild) {
+			element?.removeChild(element.firstChild);
+		}
 		return methods;
 	}
 
