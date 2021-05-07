@@ -105,6 +105,14 @@ function _(selector, create, contents, strict) {
         keydown,
         keyup,
         debug,
+        hover,
+        unhover,
+        active,
+        unactive,
+        css,
+        removeChildren,
+        empty,
+        parent,
         element,
         meta,
     };
@@ -322,6 +330,8 @@ function _(selector, create, contents, strict) {
      * @description Sets the "metadata" of a element for showing passed classes, and other methods
      * @param {object} obj
      * @param {string} [obj.hiddenClass]
+     * @param {string} [obj.hoverClass]
+     * @param {string} [obj.activeClass]
      */
     function setMeta(obj) {
         meta = obj;
@@ -343,11 +353,19 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Sets on event listener and runs cb on event
-     * @param {string|any} event
-     * @param {Function} cb
+     * @param {string} event One event or multiple events seperated by one space
+     * @param {Function | Array&lt;Function>} cb A callback function or an array of callback functions that will be called by their index of events
      */
     function on(event, cb) {
-        element === null || element === void 0 ? void 0 : element.addEventListener(event, cb());
+        let eventArr = event.split(' ');
+        eventArr.forEach((value, index) => {
+            if (Array.isArray(cb)) {
+                element === null || element === void 0 ? void 0 : element.addEventListener(value, cb[index]);
+            }
+            else {
+                element === null || element === void 0 ? void 0 : element.addEventListener(value, cb);
+            }
+        });
         return methods;
     }
     /**
@@ -397,9 +415,87 @@ function _(selector, create, contents, strict) {
         element === null || element === void 0 ? void 0 : element.addEventListener('keydown', cb());
         return methods;
     }
+    /**
+     * @description Console logs any arguments
+     * @param {...any} args
+     */
     function debug(...args) {
         console.log(...args);
         return methods;
+    }
+    /**
+     * @description Adds the hoverClass that was set with setMeta(metaObj)
+     */
+    function hover() {
+        meta.hoverClass ? element === null || element === void 0 ? void 0 : element.classList.add(meta.hoverClass) : null;
+        return methods;
+    }
+    /**
+     * @description Adds the hoverClass that was set with setMeta(metaObj)
+     */
+    function unhover() {
+        meta.hoverClass ? element === null || element === void 0 ? void 0 : element.classList.remove(meta.hoverClass) : null;
+        return methods;
+    }
+    /**
+     * @description Adds the activeClass that was set with setMeta(metaObj)
+     */
+    function active() {
+        meta.activeClass ? element === null || element === void 0 ? void 0 : element.classList.add(meta.activeClass) : null;
+        return methods;
+    }
+    /**
+     * @description Adds the activeClass that was set with setMeta(metaObj)
+     */
+    function unactive() {
+        meta.activeClass ? element === null || element === void 0 ? void 0 : element.classList.remove(meta.activeClass) : null;
+        return methods;
+    }
+    /**
+     * @description Retuns computedStyle of element
+     * @param {string} [pseudoElement]
+     * @returns CSSStyleDeclaration | null
+     */
+    function css(pseudoElement) {
+        let returned = null;
+        element
+            ? pseudoElement
+                ? (returned = getComputedStyle(element, pseudoElement))
+                : (returned = getComputedStyle(element))
+            : (returned = null);
+        return returned;
+    }
+    /**
+     * @description Removes all empty child nodes
+     */
+    function empty() {
+        if (element === null || element === void 0 ? void 0 : element.hasChildNodes()) {
+            for (let i = 0; i &lt; (element === null || element === void 0 ? void 0 : element.children.length); i++) {
+                let htmlstring = element === null || element === void 0 ? void 0 : element.children[i].innerHTML;
+                htmlstring = htmlstring.trim
+                    ? htmlstring.trim()
+                    : htmlstring.replace(/^\s+/, '');
+                if (htmlstring == '') {
+                    element === null || element === void 0 ? void 0 : element.children[i].remove();
+                }
+            }
+        }
+    }
+    /**
+     * @description Removes all child nodes
+     */
+    function removeChildren() {
+        while (element === null || element === void 0 ? void 0 : element.firstChild) {
+            element === null || element === void 0 ? void 0 : element.removeChild(element.firstChild);
+        }
+        return methods;
+    }
+    /**
+     * @description Returns the parent element
+     * @returns HTMLElement
+     */
+    function parent() {
+        return element === null || element === void 0 ? void 0 : element.parentElement;
     }
     /**
      * @description Removes the element
@@ -434,7 +530,7 @@ let storage = localStorage;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun May 02 2021 11:58:19 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri May 07 2021 10:56:11 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

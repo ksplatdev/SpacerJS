@@ -33,7 +33,9 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 9. Smart and compact on() listener
 10. Adding and removing classes.
 11. Great [Docs](https://ksplatdev.github.io/SpacerJS/-_.html))
-12. And a **_lot_** more
+12. Easy to follow [examples](examples.md)
+13. And some [testing code](test)
+14. And a **_lot_** more
 
 <br>
 

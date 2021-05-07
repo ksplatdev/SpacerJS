@@ -72,6 +72,7 @@ interface _Methods {
 	css: Function;
 	removeChildren: Function;
 	empty: Function;
+	parent: Function;
 }
 
 interface _Meta {
@@ -144,6 +145,7 @@ function _(
 		css,
 		removeChildren,
 		empty,
+		parent,
 		element,
 		meta,
 	};
@@ -443,7 +445,7 @@ function _(
 	/**
 	 * @description Sets on event listener and runs cb on event
 	 * @param {string} event One event or multiple events seperated by one space
-	 * @param {(ev?: Event) => any | Array<Function>} cb A callback function or an array of callback functions that will be called by their index of events
+	 * @param {Function | Array<Function>} cb A callback function or an array of callback functions that will be called by their index of events
 	 */
 
 	function on(event: string, cb: (ev?: Event) => any | Array<Function>) {
@@ -608,6 +610,15 @@ function _(
 			element?.removeChild(element.firstChild);
 		}
 		return methods;
+	}
+
+	/**
+	 * @description Returns the parent element
+	 * @returns HTMLElement
+	 */
+
+	function parent() {
+		return element?.parentElement;
 	}
 
 	/**

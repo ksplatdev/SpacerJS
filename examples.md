@@ -74,6 +74,12 @@ myElement.addClass('myClass');
 
 // remove a class
 myElement.removeClass('myClass');
+
+// removes all empty child elements
+myElement.empty();
+
+// removes all children
+myElement.removeChildren();
 ```
 
 ## Getting & Promises
@@ -83,6 +89,12 @@ let myElement = _('.myElement');
 
 // get children
 let childrenList = myElement.children();
+
+// get parent
+let parent = myElement.parent();
+
+// get css
+let css = myElement.css();
 
 // sleep promise for 5 seconds
 myElement
@@ -107,9 +119,14 @@ myElement.click();
 myElement.dbclick();
 
 // event listener
-myElement.on('click', () => {
-	console.log('clicked');
-});
+myElement.on('click mouseover', [
+	() => {
+		console.log('clicked');
+	},
+	() => {
+		console.log('hovered');
+	},
+]);
 
 // keydown listener
 myElement.keydown(() => {
@@ -158,7 +175,11 @@ if (myElement.compare(myOtherElement)) console.log('true');
 let myElement = _('.myElement');
 
 // set element meta
-myElement.setMeta({ hiddenClass: 'hidden' });
+myElement.setMeta({
+	hiddenClass: 'hidden',
+	hoverClass: 'hover',
+	activeClass: 'active',
+});
 
 // get element meta
 console.log(myElement.meta);
@@ -168,6 +189,18 @@ myElement.show();
 
 // add meta hiddenClass
 myElement.hide();
+
+// remove meta hoverClass
+myElement.hover();
+
+// add meta hoverClass
+myElement.unhover();
+
+// remove meta activeClass
+myElement.active();
+
+// add meta activeClass
+myElement.unactive();
 ```
 
 ## Misc
@@ -178,8 +211,11 @@ let myElement = _('.myElement');
 // scroll element into view at the top of element
 myElement.sToView(true);
 
+// console.log chaning
+myElement.debug('SpacerJS').sToView(true);
+
 // returns string representation of the node
-console.log(myElement.toStr());
+myElement.debug(myElement.toStr());
 
 // check if element contains part or whole string
 if (myElement.contains('Contains part of this text', false))
