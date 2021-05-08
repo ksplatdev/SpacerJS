@@ -6,6 +6,14 @@ Read the [documentation](https://ksplatdev.github.io/SpacerJS/-_.html) for more 
 
 **_MOST FUNCTIONS ARE CHAINABLE_**
 
+## Ease of Access Global Variables
+
+```js
+console.log(body == document.body); // true
+
+console.log(head == document.head); // true
+```
+
 ## Selecting Elements
 
 ```js
@@ -16,7 +24,30 @@ let myElement = _('.mySelector');
 let myOtherElement = _('.myOtherSelector', false, 'Text to find', false);
 
 // select elements in the body and return all divs in a node list
-let myElements = _('body').__('div');
+let myElements = _('body').__('div').nodelist; // array
+
+// iterate through a list
+let myList = _(body).__('div'); // without .nodelist as we do not want it be an array
+
+myList.each((node, i) => {
+	console.log(_(node).kill());
+});
+
+// selecting an elements by HTMLElement
+let myOtherElements = _(body);
+
+// select the first child
+let firstChild = myElement.first();
+
+// select the last child
+let lastChild = myElement.last();
+
+// select a certain child
+// **NOT ARRAY 0 INDEX BASED**
+// Example:
+// Incorrect: let elem = myElement.at(4) // this returns the fourth element
+// Correct:
+let fifthElement = myElement.at(5);
 ```
 
 ## Appending Elements
@@ -24,17 +55,23 @@ let myElements = _('body').__('div');
 ```js
 let myElement = _('.myElement');
 
-// appends a string or node
+// appends a string or htmlelement
 myElement.append('Hello, world!');
 
-// appends element to a parent
-myElement.appendTo(document.body);
+// appends itself to a parent
+myElement.appendTo(body);
 
 // appends a child element
 myElement.appendChild(myChildElement);
 
 // appends a list of elements
 myElement.appendList(myElementList);
+
+// prepends a string or htmlelement
+myElement.prepend('This is at the top!');
+
+// prepends itself to a parent
+myElement.prependTo(body);
 ```
 
 ## Creating elements
@@ -82,6 +119,21 @@ myElement.empty();
 myElement.removeChildren();
 ```
 
+## Animating Elements
+
+```js
+let myElement = _('.myElement');
+
+// fade out an element
+myElement.fadeOut(); // one param being intensity which defaults to 0.05
+
+// fade in an element
+myElement.fadeIn(); // one param being intensity which defaults to 0.05
+
+// transition a css property
+myElement.animate('color', 'red', '1s');
+```
+
 ## Getting & Promises
 
 ```js
@@ -92,6 +144,9 @@ let childrenList = myElement.children();
 
 // get parent
 let parent = myElement.parent();
+
+// get clientBoundingRect
+let rect = myElement.size();
 
 // get css
 let css = myElement.css();
@@ -127,6 +182,9 @@ myElement.on('click mouseover', [
 		console.log('hovered');
 	},
 ]);
+
+// trigger an event
+myElement.trigger('mouseover');
 
 // keydown listener
 myElement.keydown(() => {

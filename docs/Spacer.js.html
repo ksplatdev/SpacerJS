@@ -66,9 +66,15 @@ SOFTWARE.
  * @namespace
  */
 function _(selector, create, contents, strict) {
-    let element = document.querySelector(selector) || null;
+    let element = null;
     let nodelist = [] || null;
     let meta = {};
+    if (typeof selector == 'string') {
+        element = document.querySelector(selector);
+    }
+    else {
+        element = selector;
+    }
     const methods = {
         __,
         append,
@@ -113,15 +119,29 @@ function _(selector, create, contents, strict) {
         removeChildren,
         empty,
         parent,
+        first,
+        last,
+        at,
+        each,
+        trigger,
+        size,
+        prepend,
+        prependTo,
+        prependList,
+        randomChild,
+        fadeOut,
+        fadeIn,
+        animate,
         element,
+        nodelist,
         meta,
     };
     // create element
-    if (create) {
+    if (create &amp;&amp; typeof selector == 'string') {
         element = document.createElement(selector);
     }
     // check for specific contents in an element
-    if (contents) {
+    if (contents &amp;&amp; typeof selector == 'string') {
         let elements = document.querySelectorAll(selector);
         if (strict == undefined)
             strict = true;
@@ -135,32 +155,39 @@ function _(selector, create, contents, strict) {
     /**
      * @description Selects and returns a NodeList
      * @param {string} selector QuerySelectorAll string
-     * @returns NodeList
      */
     function __(selector) {
         nodelist = document.querySelectorAll(selector) || null;
-        return nodelist;
+        methods.nodelist = nodelist;
+        return methods;
     }
     /**
      * @description Appends the child element to a parent element
-     * @param {string} parent Selector string
+     * @param {string|HTMLElement} parent Selector string
      */
     function appendTo(parent) {
         var _a;
-        element ? (_a = document.querySelector(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(element) : null;
+        if (typeof parent == 'string') {
+            element
+                ? (_a = document.querySelector(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(element)
+                : null;
+        }
+        else {
+            element ? parent.appendChild(element) : null;
+        }
         return methods;
     }
     /**
      * @description Appends the a Node or string to a parent element
-     * @param {Node|String} parent Selector string
+     * @param {HTMLElement|Node|String} elem Selector string or HTMLElement
      */
-    function append(str) {
-        element === null || element === void 0 ? void 0 : element.append(str);
+    function append(elem) {
+        element === null || element === void 0 ? void 0 : element.append(elem);
         return methods;
     }
     /**
      * @description Appends a child element
-     * @param {HTMLElement} child
+     * @param {HTMLElement} child An HTMLElement
      */
     function appendChild(child) {
         element ? element.appendChild(child) : null;
@@ -168,11 +195,45 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Appends a list of HTML Elements
-     * @param {Array&lt;HTMLElement>} elementlist
+     * @param {Array&lt;HTMLElement>} elementlist Array of Elements or nodes
      */
     function appendList(elementlist) {
         elementlist.forEach((element) => {
             element ? element.appendChild(element) : null;
+        });
+        return methods;
+    }
+    /**
+     * @description Appends the child element to a parent element
+     * @param {string|HTMLElement} parent Selector string
+     */
+    function prependTo(parent) {
+        var _a;
+        if (typeof parent == 'string') {
+            element
+                ? (_a = document.querySelector(parent)) === null || _a === void 0 ? void 0 : _a.appendChild(element)
+                : null;
+        }
+        else {
+            element ? parent.prepend(element) : null;
+        }
+        return methods;
+    }
+    /**
+     * @description Appends the a Node or string to a parent element
+     * @param {HTMLElement|Node|String} elem Selector string or HTMLElement
+     */
+    function prepend(elem) {
+        element === null || element === void 0 ? void 0 : element.prepend(elem);
+        return methods;
+    }
+    /**
+     * @description Appends a list of HTML Elements
+     * @param {Array&lt;HTMLElement>} elementlist Array of Elements or nodes
+     */
+    function prependList(elementlist) {
+        elementlist.forEach((element) => {
+            element ? element.prepend(element) : null;
         });
         return methods;
     }
@@ -246,7 +307,6 @@ function _(selector, create, contents, strict) {
      */
     function toStr() {
         return element ? element.toString() : null;
-        return methods;
     }
     /**
      * @description Checks if the element contains a Node
@@ -255,7 +315,6 @@ function _(selector, create, contents, strict) {
      */
     function contains(node) {
         return element ? element.contains(node) : null;
-        return methods;
     }
     /**
      * @description Clones the element
@@ -270,7 +329,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Checks if the element has an certain attribute
-     * @param {string} attribute
+     * @param {string} attribute Attribute
      * @returns Boolean
      */
     function hasAttr(attribute) {
@@ -278,8 +337,8 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Sets/Creates a attribute to a value
-     * @param {string} attribute
-     * @param {string} value
+     * @param {string} attribute Attribute to set/create
+     * @param {string} value Value that the Attribute will be set to
      */
     function attr(attribute, value) {
         element === null || element === void 0 ? void 0 : element.setAttribute(attribute, value);
@@ -296,7 +355,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Compares two nodes to see if they are similar
-     * @param {HTMLElement | Node} node
+     * @param {HTMLElement | Node} node HTMLElement or Node
      * @returns Boolean
      */
     function compareNode(node) {
@@ -311,7 +370,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Removes a child node
-     * @param {HTMLElement | Node} node
+     * @param {HTMLElement | Node} node HTMLElement or Node
      */
     function removeChild(node) {
         element === null || element === void 0 ? void 0 : element.removeChild(node);
@@ -319,8 +378,8 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Replaces a child element
-     * @param {HTMLElement | Node} newChild
-     * @param {HTMLElement | Node} oldChild
+     * @param {HTMLElement | Node} newChild New Element
+     * @param {HTMLElement | Node} oldChild Old Element
      */
     function replaceChild(newChild, oldChild) {
         element === null || element === void 0 ? void 0 : element.replaceChild(newChild, oldChild);
@@ -328,10 +387,10 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Sets the "metadata" of a element for showing passed classes, and other methods
-     * @param {object} obj
-     * @param {string} [obj.hiddenClass]
-     * @param {string} [obj.hoverClass]
-     * @param {string} [obj.activeClass]
+     * @param {object} obj Meta Data Object
+     * @param {string} [obj.hiddenClass] Class to be used when using hide() or show()
+     * @param {string} [obj.hoverClass] Class to be used when using hover() or unhover()
+     * @param {string} [obj.activeClass] Class to be used when using active() or unactive()
      */
     function setMeta(obj) {
         meta = obj;
@@ -370,7 +429,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Adds a class to the element
-     * @param {string} className
+     * @param {string} className Class Name
      */
     function addClass(className) {
         element === null || element === void 0 ? void 0 : element.classList.add(className);
@@ -378,7 +437,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Removes a class from the element
-     * @param {string} className
+     * @param {string} className Class Name
      */
     function removeClass(className) {
         element === null || element === void 0 ? void 0 : element.classList.remove(className);
@@ -393,7 +452,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Sleep promise
-     * @param {number} ms
+     * @param {number} ms Millisecond delay
      * @returns Promise&lt;number>
      */
     function sleep(ms) {
@@ -401,7 +460,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Listens for the keydown event
-     * @param {Function} cb
+     * @param {Function} cb Callback
      */
     function keydown(cb) {
         element === null || element === void 0 ? void 0 : element.addEventListener('keydown', cb());
@@ -409,7 +468,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Listens for the keyup event
-     * @param {Function} cb
+     * @param {Function} cb Callback
      */
     function keyup(cb) {
         element === null || element === void 0 ? void 0 : element.addEventListener('keydown', cb());
@@ -417,7 +476,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Console logs any arguments
-     * @param {...any} args
+     * @param {...any} args Any arguments
      */
     function debug(...args) {
         console.log(...args);
@@ -453,7 +512,7 @@ function _(selector, create, contents, strict) {
     }
     /**
      * @description Retuns computedStyle of element
-     * @param {string} [pseudoElement]
+     * @param {string} [pseudoElement] A pseudoElement
      * @returns CSSStyleDeclaration | null
      */
     function css(pseudoElement) {
@@ -498,6 +557,127 @@ function _(selector, create, contents, strict) {
         return element === null || element === void 0 ? void 0 : element.parentElement;
     }
     /**
+     * @description Returns the first child element as an HTMLelement
+     * @param {boolean} [node=false] Determines the returned value as a HTMLElement or Node
+     * @returns HTMLElement
+     */
+    function first(node) {
+        return node ? element === null || element === void 0 ? void 0 : element.firstChild : element === null || element === void 0 ? void 0 : element.firstElementChild;
+    }
+    /**
+     * @description Returns the last child element as an HTMLelement
+     * @param {boolean} [node=false] Determines the returned value as a HTMLElement or Node
+     * @returns HTMLElement
+     */
+    function last(node) {
+        return node ? element === null || element === void 0 ? void 0 : element.lastChild : element === null || element === void 0 ? void 0 : element.lastElementChild;
+    }
+    /**
+     * @description Selects an element, not 0 based
+     * @example let myElement = _('div').at(5) // gets the fifth child and not the 4th like an array
+     * @param {number} index Index
+     * @returns Element | undefined
+     */
+    function at(index) {
+        if (index == 0)
+            console.warn('SpacerJS: _().at(), index is 0, index is not array 0 based');
+        return element === null || element === void 0 ? void 0 : element.children[index - 1];
+    }
+    /**
+     * @description Iterate through a nodelist
+     * @param {Function} cb Callback with first parameter being value and last being index
+     */
+    function each(cb) {
+        nodelist === null || nodelist === void 0 ? void 0 : nodelist.forEach(cb.bind(methods));
+        return methods;
+    }
+    /**
+     * @description Triggers an event
+     * @param {string} event Event
+     */
+    function trigger(event) {
+        element === null || element === void 0 ? void 0 : element.dispatchEvent(new Event(event));
+        return methods;
+    }
+    /**
+     * @description Returns the Bounding Client Rect
+     * @returns DomRect
+     */
+    function size() {
+        return element === null || element === void 0 ? void 0 : element.getBoundingClientRect();
+    }
+    /**
+     * @description Returns a random child
+     * @returns HTMLElement | Node | null
+     */
+    function randomChild() {
+        return (element === null || element === void 0 ? void 0 : element.children)
+            ? Math.floor(Math.random() * ((element === null || element === void 0 ? void 0 : element.children.length) - 0 + 1) + 0)
+            : null;
+    }
+    /**
+     * @description Fades out the selected element
+     * @param {number} [intensity=0.05] Intensity of the fade
+     */
+    function fadeOut(intensity) {
+        let tempNum = 1;
+        let inten = intensity || 0.05;
+        if (element) {
+            element.style.opacity = '1';
+        }
+        let int = setInterval(() => {
+            if (element) {
+                if (tempNum > 0) {
+                    tempNum -= inten;
+                    element.style.opacity = `${tempNum}`;
+                }
+                else {
+                    element.style.opacity = '0';
+                    clearInterval(int);
+                }
+            }
+        }, 100);
+        return methods;
+    }
+    /**
+     * @description Fades in the selected element
+     * @param {number} [intensity=0.05] Intensity of the fade
+     */
+    function fadeIn(intensity) {
+        let tempNum = 0;
+        let inten = intensity || 0.05;
+        if (element) {
+            element.style.opacity = '0';
+        }
+        let int = setInterval(() => {
+            if (element) {
+                if (tempNum &lt; 1) {
+                    tempNum += inten;
+                    element.style.opacity = `${tempNum}`;
+                }
+                else {
+                    element.style.opacity = '1';
+                    clearInterval(int);
+                }
+            }
+        }, 100);
+        return methods;
+    }
+    /**
+     * @description Animates the element
+     * @param {string} cssProperty cssProperty to edit
+     * @param {string} value New value of cssProperty
+     * @param {string} time Css Transition length, ex: "1s"
+     */
+    function animate(cssProperty, value, time) {
+        let className = `SpacerJS-Animation-${Math.floor(Math.random() * (100000 - 0 + 1) + 0)}`;
+        let style = document.createElement('style');
+        style.innerHTML = `.${className} { ${cssProperty}: ${value}; transition: ${cssProperty} ${time}; }`;
+        head.appendChild(style);
+        addClass(className);
+        return methods;
+    }
+    /**
      * @description Removes the element
      */
     function kill() {
@@ -511,8 +691,6 @@ function _(selector, create, contents, strict) {
 let body = document.body;
 /**Head Element @type {HTMLElement} */
 let head = document.head;
-/**localStorage */
-let storage = localStorage;
 //#endregion EOA Variables
 </code></pre>
         </article>
@@ -524,13 +702,13 @@ let storage = localStorage;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="-_.html">_</a></li></ul><h3>Global</h3><ul><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li><li><a href="global.html#storage">storage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="-_.html">_</a></li></ul><h3>Global</h3><ul><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri May 07 2021 10:56:11 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri May 07 2021 20:06:39 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,9 +1,11 @@
 {
 	"name": "spacerjs",
-	"version": "1.3.0",
+	"version": "2.0.0",
 	"description": "Manipulate the DOM easily",
 	"main": "build/Spacer.js",
-	"scripts": {},
+	"scripts": {
+		"minify": "uglifyjs build/Spacer.js -c -o build/Spacer.min.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/ksplatdev/SpacerJS.git"
@@ -22,6 +24,7 @@
 	},
 	"homepage": "https://github.com/ksplatdev/SpacerJS#readme",
 	"devDependencies": {
-		"typescript": "^4.2.4"
+		"typescript": "^4.2.4",
+		"uglify-js": "^3.13.5"
 	}
 }

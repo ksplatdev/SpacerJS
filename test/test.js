@@ -1,6 +1,5 @@
 var myElem = _('#test').append('Hello, ').html(' <b>World!</b>');
 var myButton = _('button').setTitle('A button');
-var myNodeList = _('body').__('button');
 
 var containsText = _('span', false, 'Testing contains ', false);
 
@@ -26,6 +25,9 @@ myButton.on('click mouseover mouseout', [
 		myButton.unhover();
 	},
 ]);
+
+// Animate
+containsText.animate('color', 'red', '1s');
 
 // sleep promise
 
@@ -61,7 +63,7 @@ if (myElem.contains(myButton.element, false)) {
 
 	// clone element with children (the deep parameter (optional))
 	let clone = myElem.clone(true);
-	clone.id = 'cloned';
+	clone.class = 'cloned';
 	clone.innerHTML += ' <b>Cloned</b>';
 	body.append(clone);
 }
@@ -69,3 +71,11 @@ if (myElem.contains(myButton.element, false)) {
 // remove empty elements
 
 _('body').empty();
+
+// iterate through a node list
+
+var myNodeList = _(body).__('p'); // .nodelist returns an array
+
+myNodeList.each((node, i) => {
+	console.log(_(node).parent());
+});

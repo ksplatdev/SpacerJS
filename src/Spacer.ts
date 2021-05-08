@@ -73,6 +73,20 @@ interface _Methods {
 	removeChildren: Function;
 	empty: Function;
 	parent: Function;
+	nodelist: NodeList | Array<HTMLElement | Node>;
+	first: Function;
+	last: Function;
+	at: Function;
+	each: Function;
+	trigger: Function;
+	size: Function;
+	prepend: Function;
+	prependTo: Function;
+	prependList: Function;
+	randomChild: Function;
+	fadeOut: Function;
+	fadeIn: Function;
+	animate: Function;
 }
 
 interface _Meta {
@@ -93,14 +107,20 @@ interface _Meta {
  */
 
 function _(
-	selector: string,
+	selector: string | HTMLElement,
 	create?: boolean,
 	contents?: string,
 	strict?: boolean
 ) {
-	let element: HTMLElement | null = document.querySelector(selector) || null;
+	let element: HTMLElement | null = null;
 	let nodelist: Array<HTMLElement | Node> | NodeList | null = [] || null;
 	let meta: _Meta = {};
+
+	if (typeof selector == 'string') {
+		element = document.querySelector(selector);
+	} else {
+		element = selector;
+	}
 
 	const methods: _Methods = {
 		__,
@@ -146,18 +166,32 @@ function _(
 		removeChildren,
 		empty,
 		parent,
+		first,
+		last,
+		at,
+		each,
+		trigger,
+		size,
+		prepend,
+		prependTo,
+		prependList,
+		randomChild,
+		fadeOut,
+		fadeIn,
+		animate,
 		element,
+		nodelist,
 		meta,
 	};
 
 	// create element
 
-	if (create) {
+	if (create && typeof selector == 'string') {
 		element = document.createElement(selector);
 	}
 
 	// check for specific contents in an element
-	if (contents) {
+	if (contents && typeof selector == 'string') {
 		let elements: any = document.querySelectorAll(selector);
 		if (strict == undefined) strict = true;
 		if (strict == false) {
@@ -172,37 +206,44 @@ function _(
 	/**
 	 * @description Selects and returns a NodeList
 	 * @param {string} selector QuerySelectorAll string
-	 * @returns NodeList
 	 */
 
 	function __(selector: string) {
 		nodelist = document.querySelectorAll(selector) || null;
-		return nodelist;
+		methods.nodelist = nodelist;
+		return methods;
 	}
 
 	/**
 	 * @description Appends the child element to a parent element
-	 * @param {string} parent Selector string
+	 * @param {string|HTMLElement} parent Selector string
 	 */
 
-	function appendTo(parent: string) {
-		element ? document.querySelector(parent)?.appendChild(element) : null;
+	function appendTo(parent: string | HTMLElement) {
+		if (typeof parent == 'string') {
+			element
+				? document.querySelector(parent)?.appendChild(element)
+				: null;
+		} else {
+			element ? parent.appendChild(element) : null;
+		}
+
 		return methods;
 	}
 
 	/**
 	 * @description Appends the a Node or string to a parent element
-	 * @param {Node|String} parent Selector string
+	 * @param {HTMLElement|Node|String} elem Selector string or HTMLElement
 	 */
 
-	function append(str: Node | string) {
-		element?.append(str);
+	function append(elem: HTMLElement | Node | string) {
+		element?.append(elem);
 		return methods;
 	}
 
 	/**
 	 * @description Appends a child element
-	 * @param {HTMLElement} child
+	 * @param {HTMLElement} child An HTMLElement
 	 */
 
 	function appendChild(child: HTMLElement) {
@@ -212,12 +253,51 @@ function _(
 
 	/**
 	 * @description Appends a list of HTML Elements
-	 * @param {Array<HTMLElement>} elementlist
+	 * @param {Array<HTMLElement>} elementlist Array of Elements or nodes
 	 */
 
 	function appendList(elementlist: Array<HTMLElement | Element | Node>) {
 		elementlist.forEach((element) => {
 			element ? element.appendChild(element) : null;
+		});
+		return methods;
+	}
+
+	/**
+	 * @description Appends the child element to a parent element
+	 * @param {string|HTMLElement} parent Selector string
+	 */
+
+	function prependTo(parent: string | HTMLElement) {
+		if (typeof parent == 'string') {
+			element
+				? document.querySelector(parent)?.appendChild(element)
+				: null;
+		} else {
+			element ? parent.prepend(element) : null;
+		}
+
+		return methods;
+	}
+
+	/**
+	 * @description Appends the a Node or string to a parent element
+	 * @param {HTMLElement|Node|String} elem Selector string or HTMLElement
+	 */
+
+	function prepend(elem: HTMLElement | Node | string) {
+		element?.prepend(elem);
+		return methods;
+	}
+
+	/**
+	 * @description Appends a list of HTML Elements
+	 * @param {Array<HTMLElement>} elementlist Array of Elements or nodes
+	 */
+
+	function prependList(elementlist: Array<HTMLElement | Element>) {
+		elementlist.forEach((element) => {
+			element ? element.prepend(element) : null;
 		});
 		return methods;
 	}
@@ -309,7 +389,6 @@ function _(
 
 	function toStr() {
 		return element ? element.toString() : null;
-		return methods;
 	}
 
 	/**
@@ -320,7 +399,6 @@ function _(
 
 	function contains(node: Node) {
 		return element ? element.contains(node) : null;
-		return methods;
 	}
 
 	/**
@@ -338,7 +416,7 @@ function _(
 
 	/**
 	 * @description Checks if the element has an certain attribute
-	 * @param {string} attribute
+	 * @param {string} attribute Attribute
 	 * @returns Boolean
 	 */
 
@@ -348,8 +426,8 @@ function _(
 
 	/**
 	 * @description Sets/Creates a attribute to a value
-	 * @param {string} attribute
-	 * @param {string} value
+	 * @param {string} attribute Attribute to set/create
+	 * @param {string} value Value that the Attribute will be set to
 	 */
 
 	function attr(attribute: string, value: string) {
@@ -370,7 +448,7 @@ function _(
 
 	/**
 	 * @description Compares two nodes to see if they are similar
-	 * @param {HTMLElement | Node} node
+	 * @param {HTMLElement | Node} node HTMLElement or Node
 	 * @returns Boolean
 	 */
 
@@ -389,7 +467,7 @@ function _(
 
 	/**
 	 * @description Removes a child node
-	 * @param {HTMLElement | Node} node
+	 * @param {HTMLElement | Node} node HTMLElement or Node
 	 */
 
 	function removeChild(node: HTMLElement | Node) {
@@ -399,8 +477,8 @@ function _(
 
 	/**
 	 * @description Replaces a child element
-	 * @param {HTMLElement | Node} newChild
-	 * @param {HTMLElement | Node} oldChild
+	 * @param {HTMLElement | Node} newChild New Element
+	 * @param {HTMLElement | Node} oldChild Old Element
 	 */
 
 	function replaceChild(
@@ -413,10 +491,10 @@ function _(
 
 	/**
 	 * @description Sets the "metadata" of a element for showing passed classes, and other methods
-	 * @param {object} obj
-	 * @param {string} [obj.hiddenClass]
-	 * @param {string} [obj.hoverClass]
-	 * @param {string} [obj.activeClass]
+	 * @param {object} obj Meta Data Object
+	 * @param {string} [obj.hiddenClass] Class to be used when using hide() or show()
+	 * @param {string} [obj.hoverClass] Class to be used when using hover() or unhover()
+	 * @param {string} [obj.activeClass] Class to be used when using active() or unactive()
 	 */
 
 	function setMeta(obj: _Meta) {
@@ -464,7 +542,7 @@ function _(
 
 	/**
 	 * @description Adds a class to the element
-	 * @param {string} className
+	 * @param {string} className Class Name
 	 */
 
 	function addClass(className: string) {
@@ -474,7 +552,7 @@ function _(
 
 	/**
 	 * @description Removes a class from the element
-	 * @param {string} className
+	 * @param {string} className Class Name
 	 */
 
 	function removeClass(className: string) {
@@ -493,7 +571,7 @@ function _(
 
 	/**
 	 * @description Sleep promise
-	 * @param {number} ms
+	 * @param {number} ms Millisecond delay
 	 * @returns Promise<number>
 	 */
 
@@ -503,7 +581,7 @@ function _(
 
 	/**
 	 * @description Listens for the keydown event
-	 * @param {Function} cb
+	 * @param {Function} cb Callback
 	 */
 
 	function keydown(cb: Function) {
@@ -513,7 +591,7 @@ function _(
 
 	/**
 	 * @description Listens for the keyup event
-	 * @param {Function} cb
+	 * @param {Function} cb Callback
 	 */
 
 	function keyup(cb: Function) {
@@ -523,7 +601,7 @@ function _(
 
 	/**
 	 * @description Console logs any arguments
-	 * @param {...any} args
+	 * @param {...any} args Any arguments
 	 */
 
 	function debug(...args: any) {
@@ -569,7 +647,7 @@ function _(
 
 	/**
 	 * @description Retuns computedStyle of element
-	 * @param {string} [pseudoElement]
+	 * @param {string} [pseudoElement] A pseudoElement
 	 * @returns CSSStyleDeclaration | null
 	 */
 
@@ -622,6 +700,158 @@ function _(
 	}
 
 	/**
+	 * @description Returns the first child element as an HTMLelement
+	 * @param {boolean} [node=false] Determines the returned value as a HTMLElement or Node
+	 * @returns HTMLElement
+	 */
+
+	function first(node?: boolean) {
+		return node ? element?.firstChild : element?.firstElementChild;
+	}
+
+	/**
+	 * @description Returns the last child element as an HTMLelement
+	 * @param {boolean} [node=false] Determines the returned value as a HTMLElement or Node
+	 * @returns HTMLElement
+	 */
+
+	function last(node?: boolean) {
+		return node ? element?.lastChild : element?.lastElementChild;
+	}
+
+	/**
+	 * @description Selects an element, not 0 based
+	 * @example let myElement = _('div').at(5) // gets the fifth child and not the 4th like an array
+	 * @param {number} index Index
+	 * @returns Element | undefined
+	 */
+
+	function at(index: number) {
+		if (index == 0)
+			console.warn(
+				'SpacerJS: _().at(), index is 0, index is not array 0 based'
+			);
+		return element?.children[index - 1];
+	}
+
+	/**
+	 * @description Iterate through a nodelist
+	 * @param {Function} cb Callback with first parameter being value and last being index
+	 */
+
+	function each(
+		cb: (value: HTMLElement | Node | null, index: number) => any
+	) {
+		nodelist?.forEach(cb.bind(methods));
+		return methods;
+	}
+
+	/**
+	 * @description Triggers an event
+	 * @param {string} event Event
+	 */
+
+	function trigger(event: string) {
+		element?.dispatchEvent(new Event(event));
+		return methods;
+	}
+
+	/**
+	 * @description Returns the Bounding Client Rect
+	 * @returns DomRect
+	 */
+
+	function size() {
+		return element?.getBoundingClientRect();
+	}
+
+	/**
+	 * @description Returns a random child
+	 * @returns HTMLElement | Node | null
+	 */
+
+	function randomChild() {
+		return element?.children
+			? Math.floor(Math.random() * (element?.children.length - 0 + 1) + 0)
+			: null;
+	}
+
+	/**
+	 * @description Fades out the selected element
+	 * @param {number} [intensity=0.05] Intensity of the fade
+	 */
+
+	function fadeOut(intensity?: number) {
+		let tempNum: number = 1;
+		let inten = intensity || 0.05;
+		if (element) {
+			element.style.opacity = '1';
+		}
+
+		let int = setInterval(() => {
+			if (element) {
+				if (tempNum > 0) {
+					tempNum -= inten;
+					element.style.opacity = `${tempNum}`;
+				} else {
+					element.style.opacity = '0';
+					clearInterval(int);
+				}
+			}
+		}, 100);
+
+		return methods;
+	}
+
+	/**
+	 * @description Fades in the selected element
+	 * @param {number} [intensity=0.05] Intensity of the fade
+	 */
+
+	function fadeIn(intensity?: number) {
+		let tempNum: number = 0;
+		let inten = intensity || 0.05;
+		if (element) {
+			element.style.opacity = '0';
+		}
+
+		let int = setInterval(() => {
+			if (element) {
+				if (tempNum < 1) {
+					tempNum += inten;
+					element.style.opacity = `${tempNum}`;
+				} else {
+					element.style.opacity = '1';
+					clearInterval(int);
+				}
+			}
+		}, 100);
+
+		return methods;
+	}
+
+	/**
+	 * @description Animates the element
+	 * @param {string} cssProperty cssProperty to edit
+	 * @param {string} value New value of cssProperty
+	 * @param {string} time Css Transition length, ex: "1s"
+	 */
+
+	function animate(cssProperty: string, value: string, time: string) {
+		let className = `SpacerJS-Animation-${Math.floor(
+			Math.random() * (100000 - 0 + 1) + 0
+		)}`;
+
+		let style = document.createElement('style');
+		style.innerHTML = `.${className} { ${cssProperty}: ${value}; transition: ${cssProperty} ${time}; }`;
+		head.appendChild(style);
+
+		addClass(className);
+
+		return methods;
+	}
+
+	/**
 	 * @description Removes the element
 	 */
 
@@ -640,8 +870,5 @@ let body = document.body;
 
 /**Head Element @type {HTMLElement} */
 let head = document.head;
-
-/**localStorage */
-let storage = localStorage;
 
 //#endregion EOA Variables
