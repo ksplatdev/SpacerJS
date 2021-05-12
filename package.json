@@ -1,10 +1,11 @@
 {
 	"name": "spacerjs",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Manipulate the DOM easily",
 	"main": "build/Spacer.js",
 	"scripts": {
-		"minify": "uglifyjs build/Spacer.js -c -o build/Spacer.min.js"
+		"minify": "uglifyjs build/Spacer.js -c -o build/Spacer.min.js",
+		"minifyModule": "uglifyjs build/Spacer.esm.js -c -o build/Spacer.esm.min.js"
 	},
 	"repository": {
 		"type": "git",

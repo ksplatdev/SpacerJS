@@ -1,5 +1,6 @@
 var myElem = _('#test').append('Hello, ').html(' <b>World!</b>');
 var myButton = _('button').setTitle('A button');
+var myInput = _('#myInput');
 
 var containsText = _('span', false, 'Testing contains ', false);
 
@@ -25,6 +26,17 @@ myButton.on('click mouseover mouseout', [
 		myButton.unhover();
 	},
 ]);
+
+// Make a custom property
+// call with myElem.fn.test() or anyother instanceof _
+
+_appendCustom('test', function () {
+	console.log('test');
+});
+
+// set and read the value of myInput
+myInput.debug(myInput.val());
+myInput.debug(myInput.val('Hello, World!'));
 
 // Animate
 containsText.animate('color', 'red', '1s');
@@ -68,9 +80,16 @@ if (myElem.contains(myButton.element, false)) {
 	body.append(clone);
 }
 
-// remove empty elements
-
-_('body').empty();
+// transform and rotate
+myElem.rotate('0.5turn').debug('rotated 0.5turn');
+myElem
+	.sleep(1500)
+	.then(() => {
+		myElem.rotate('0turn').debug('reset rotation');
+	})
+	.catch((err) => {
+		throw new Error(err);
+	});
 
 // iterate through a node list
 

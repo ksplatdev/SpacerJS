@@ -117,9 +117,12 @@ myElement.empty();
 
 // removes all children
 myElement.removeChildren();
+
+// set the input value
+myElement.val('New Value');
 ```
 
-## Animating Elements
+## Animating & Transforming
 
 ```js
 let myElement = _('.myElement');
@@ -132,6 +135,12 @@ myElement.fadeIn(); // one param being intensity which defaults to 0.05
 
 // transition a css property
 myElement.animate('color', 'red', '1s');
+
+// transform an element
+myElement.transform('translate(120px, 50%)'); // any valid css transform
+
+// rotate an element
+myElement.rotate('0.5turn'); // any valid css transform rotate
 ```
 
 ## Getting & Promises
@@ -148,8 +157,14 @@ let parent = myElement.parent();
 // get clientBoundingRect
 let rect = myElement.size();
 
+// get offset
+let offset = myElement.offeset();
+
 // get css
 let css = myElement.css();
+
+// get input value
+let value = myElement.val();
 
 // sleep promise for 5 seconds
 myElement
@@ -175,10 +190,10 @@ myElement.dbclick();
 
 // event listener
 myElement.on('click mouseover', [
-	() => {
+	(event) => {
 		console.log('clicked');
 	},
-	() => {
+	(event) => {
 		console.log('hovered');
 	},
 ]);
@@ -259,6 +274,12 @@ myElement.active();
 
 // add meta activeClass
 myElement.unactive();
+
+// remove a meta property
+myElement.removeMetaProp('hiddenClass'); // removes the hiddenClass from setMeta
+
+// remove metadata completly
+myElement.deleteMeta();
 ```
 
 ## Misc
@@ -278,6 +299,9 @@ myElement.debug(myElement.toStr());
 // check if element contains part or whole string
 if (myElement.contains('Contains part of this text', false))
 	console.log('true');
+
+// check meta data state
+myElement.debug(myElement.state);
 
 // removes the node
 myElement.kill();

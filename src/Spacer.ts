@@ -87,6 +87,18 @@ interface _Methods {
 	fadeOut: Function;
 	fadeIn: Function;
 	animate: Function;
+	state: object;
+	transform: Function;
+	rotate: Function;
+	removeMetaProp: Function;
+	deleteMeta: Function;
+	fn: LooseObject;
+	val: Function;
+	offset: Function;
+}
+
+interface LooseObject {
+	[key: string]: any;
 }
 
 interface _Meta {
@@ -96,8 +108,14 @@ interface _Meta {
 }
 
 /**
+ * @private
+ */
+
+let customFunctions: LooseObject = {};
+
+/**
  * @description SpacerJS, finds/creates an element
- * @param {string} selector A valid selector
+ * @param {string|HTMLElement} selector A valid selector
  * @param {boolean} [create] Boolean to create an element or not
  * @param {string} [contents] Contents to find element by
  * @param {boolean} [strict] If true, the contents must match the text exactly
@@ -112,9 +130,34 @@ function _(
 	contents?: string,
 	strict?: boolean
 ) {
+	/**
+	 * @description The selected HTMLElement
+	 */
 	let element: HTMLElement | null = null;
+	/**
+	 * @description The selected nodelist
+	 */
 	let nodelist: Array<HTMLElement | Node> | NodeList | null = [] || null;
+	/**
+	 * @description Meta data object
+	 */
 	let meta: _Meta = {};
+	/**
+	 * @description Object that keeps track of element's meta state
+	 * @property {boolean} hidden Tracks if element is hidden by hide() or show() meta functions
+	 * @property {boolean} hovered Tracks if element is hovered by hover() or unhover() meta functions
+	 * @property {boolean} active Tracks if element is active by active() or unactive() meta functions
+	 */
+	let state = {
+		hidden: false,
+		hovered: false,
+		active: false,
+	};
+
+	/**
+	 * @description Object of any custom methods you want to add
+	 */
+	let fn = customFunctions;
 
 	if (typeof selector == 'string') {
 		element = document.querySelector(selector);
@@ -179,9 +222,17 @@ function _(
 		fadeOut,
 		fadeIn,
 		animate,
+		transform,
+		rotate,
+		removeMetaProp,
+		deleteMeta,
+		val,
+		offset,
 		element,
 		nodelist,
 		meta,
+		state,
+		fn,
 	};
 
 	// create element
@@ -508,6 +559,7 @@ function _(
 
 	function show() {
 		meta.hiddenClass ? element?.classList.remove(meta.hiddenClass) : null;
+		state.hidden = false;
 		return methods;
 	}
 
@@ -517,6 +569,7 @@ function _(
 
 	function hide() {
 		meta.hiddenClass ? element?.classList.add(meta.hiddenClass) : null;
+		state.hidden = true;
 		return methods;
 	}
 
@@ -615,6 +668,7 @@ function _(
 
 	function hover() {
 		meta.hoverClass ? element?.classList.add(meta.hoverClass) : null;
+		state.hovered = true;
 		return methods;
 	}
 
@@ -624,6 +678,7 @@ function _(
 
 	function unhover() {
 		meta.hoverClass ? element?.classList.remove(meta.hoverClass) : null;
+		state.hovered = false;
 		return methods;
 	}
 
@@ -633,6 +688,7 @@ function _(
 
 	function active() {
 		meta.activeClass ? element?.classList.add(meta.activeClass) : null;
+		state.active = true;
 		return methods;
 	}
 
@@ -642,6 +698,7 @@ function _(
 
 	function unactive() {
 		meta.activeClass ? element?.classList.remove(meta.activeClass) : null;
+		state.active = false;
 		return methods;
 	}
 
@@ -852,6 +909,83 @@ function _(
 	}
 
 	/**
+	 * @description Sets the transform of an element
+	 * @param {string} cssValue Any valid CSS Tranform
+	 * @example myElement.transform('translate(120px, 50%)')
+	 */
+
+	function transform(cssValue: string) {
+		if (element) {
+			element.style.transform = cssValue;
+		}
+		return methods;
+	}
+
+	/**
+	 * @description Sets the rotation of an element
+	 * @param {string} cssValue Any valid CSS Rotate Tranform
+	 * @example myElement.rotate('0.5turn')
+	 */
+
+	function rotate(cssValue: string) {
+		if (element) {
+			element.style.transform = `rotate(${cssValue})`;
+		}
+		return methods;
+	}
+
+	/**
+	 * @description Removes a property of Metadata
+	 * @param {string} metaKey hiddenClass, hoverClass, or activeClass
+	 */
+
+	function removeMetaProp(metaKey: string) {
+		if (metaKey == 'hiddenClass') {
+			meta.hiddenClass = '';
+		}
+		if (metaKey == 'hoverClass') {
+			meta.hoverClass = '';
+		}
+		if (metaKey == 'activeClass') {
+			meta.activeClass = '';
+		}
+		return methods;
+	}
+
+	/**
+	 * @description Removes metadata
+	 */
+
+	function deleteMeta() {
+		meta.hiddenClass = '';
+		meta.hoverClass = '';
+		meta.activeClass = '';
+		return methods;
+	}
+
+	/**
+	 * @description Returns the value of an input element and sets the input value
+	 * @param {string|any} [newValue] New value to set the input value to, optional
+	 * @returns HTMLInputElement Value
+	 */
+
+	function val(newValue?: string | any) {
+		if (element instanceof HTMLInputElement) {
+			newValue ? (element.value = newValue) : null;
+			return element.value;
+		}
+	}
+
+	/**
+	 * @description Returns the top and left coordianate
+	 * @returns object.top & object.left
+	 */
+
+	function offset() {
+		return { top: size()?.top, left: size()?.left };
+	}
+
+	/**
 	 * @description Removes the element
 	 */
 
@@ -872,3 +1006,16 @@ let body = document.body;
 let head = document.head;
 
 //#endregion EOA Variables
+
+// other functions
+
+/**
+ * @description Appends a custom function to _().fn
+ * @param {string} key Custom Function name
+ * @param {Function|any} func Custom Function
+ */
+
+function _appendCustom(key: string, func: Function | any) {
+	customFunctions[key] = func;
+	return customFunctions;
+}

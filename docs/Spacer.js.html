@@ -56,8 +56,12 @@ SOFTWARE.
 
 */
 /**
+ * @private
+ */
+let customFunctions = {};
+/**
  * @description SpacerJS, finds/creates an element
- * @param {string} selector A valid selector
+ * @param {string|HTMLElement} selector A valid selector
  * @param {boolean} [create] Boolean to create an element or not
  * @param {string} [contents] Contents to find element by
  * @param {boolean} [strict] If true, the contents must match the text exactly
@@ -66,9 +70,33 @@ SOFTWARE.
  * @namespace
  */
 function _(selector, create, contents, strict) {
+    /**
+     * @description The selected HTMLElement
+     */
     let element = null;
+    /**
+     * @description The selected nodelist
+     */
     let nodelist = [] || null;
+    /**
+     * @description Meta data object
+     */
     let meta = {};
+    /**
+     * @description Object that keeps track of element's meta state
+     * @property {boolean} hidden Tracks if element is hidden by hide() or show() meta functions
+     * @property {boolean} hovered Tracks if element is hovered by hover() or unhover() meta functions
+     * @property {boolean} active Tracks if element is active by active() or unactive() meta functions
+     */
+    let state = {
+        hidden: false,
+        hovered: false,
+        active: false,
+    };
+    /**
+     * @description Object of any custom methods you want to add
+     */
+    let fn = customFunctions;
     if (typeof selector == 'string') {
         element = document.querySelector(selector);
     }
@@ -132,9 +160,17 @@ function _(selector, create, contents, strict) {
         fadeOut,
         fadeIn,
         animate,
+        transform,
+        rotate,
+        removeMetaProp,
+        deleteMeta,
+        val,
+        offset,
         element,
         nodelist,
         meta,
+        state,
+        fn,
     };
     // create element
     if (create &amp;&amp; typeof selector == 'string') {
@@ -401,6 +437,7 @@ function _(selector, create, contents, strict) {
      */
     function show() {
         meta.hiddenClass ? element === null || element === void 0 ? void 0 : element.classList.remove(meta.hiddenClass) : null;
+        state.hidden = false;
         return methods;
     }
     /**
@@ -408,6 +445,7 @@ function _(selector, create, contents, strict) {
      */
     function hide() {
         meta.hiddenClass ? element === null || element === void 0 ? void 0 : element.classList.add(meta.hiddenClass) : null;
+        state.hidden = true;
         return methods;
     }
     /**
@@ -487,6 +525,7 @@ function _(selector, create, contents, strict) {
      */
     function hover() {
         meta.hoverClass ? element === null || element === void 0 ? void 0 : element.classList.add(meta.hoverClass) : null;
+        state.hovered = true;
         return methods;
     }
     /**
@@ -494,6 +533,7 @@ function _(selector, create, contents, strict) {
      */
     function unhover() {
         meta.hoverClass ? element === null || element === void 0 ? void 0 : element.classList.remove(meta.hoverClass) : null;
+        state.hovered = false;
         return methods;
     }
     /**
@@ -501,6 +541,7 @@ function _(selector, create, contents, strict) {
      */
     function active() {
         meta.activeClass ? element === null || element === void 0 ? void 0 : element.classList.add(meta.activeClass) : null;
+        state.active = true;
         return methods;
     }
     /**
@@ -508,6 +549,7 @@ function _(selector, create, contents, strict) {
      */
     function unactive() {
         meta.activeClass ? element === null || element === void 0 ? void 0 : element.classList.remove(meta.activeClass) : null;
+        state.active = false;
         return methods;
     }
     /**
@@ -678,6 +720,72 @@ function _(selector, create, contents, strict) {
         return methods;
     }
     /**
+     * @description Sets the transform of an element
+     * @param {string} cssValue Any valid CSS Tranform
+     * @example myElement.transform('translate(120px, 50%)')
+     */
+    function transform(cssValue) {
+        if (element) {
+            element.style.transform = cssValue;
+        }
+        return methods;
+    }
+    /**
+     * @description Sets the rotation of an element
+     * @param {string} cssValue Any valid CSS Rotate Tranform
+     * @example myElement.rotate('0.5turn')
+     */
+    function rotate(cssValue) {
+        if (element) {
+            element.style.transform = `rotate(${cssValue})`;
+        }
+        return methods;
+    }
+    /**
+     * @description Removes a property of Metadata
+     * @param {string} metaKey hiddenClass, hoverClass, or activeClass
+     */
+    function removeMetaProp(metaKey) {
+        if (metaKey == 'hiddenClass') {
+            meta.hiddenClass = '';
+        }
+        if (metaKey == 'hoverClass') {
+            meta.hoverClass = '';
+        }
+        if (metaKey == 'activeClass') {
+            meta.activeClass = '';
+        }
+        return methods;
+    }
+    /**
+     * @description Removes metadata
+     */
+    function deleteMeta() {
+        meta.hiddenClass = '';
+        meta.hoverClass = '';
+        meta.activeClass = '';
+        return methods;
+    }
+    /**
+     * @description Returns the value of an input element and sets the input value
+     * @param {string|any} [newValue] New value to set the input value to, optional
+     * @returns HTMLInputElement Value
+     */
+    function val(newValue) {
+        if (element instanceof HTMLInputElement) {
+            newValue ? (element.value = newValue) : null;
+            return element.value;
+        }
+    }
+    /**
+     * @description Returns the top and left coordianate
+     * @returns object.top &amp; object.left
+     */
+    function offset() {
+        var _a, _b;
+        return { top: (_a = size()) === null || _a === void 0 ? void 0 : _a.top, left: (_b = size()) === null || _b === void 0 ? void 0 : _b.left };
+    }
+    /**
      * @description Removes the element
      */
     function kill() {
@@ -692,6 +800,16 @@ let body = document.body;
 /**Head Element @type {HTMLElement} */
 let head = document.head;
 //#endregion EOA Variables
+// other functions
+/**
+ * @description Appends a custom function to _().fn
+ * @param {string} key Custom Function name
+ * @param {Function|any} func Custom Function
+ */
+function _appendCustom(key, func) {
+    customFunctions[key] = func;
+    return customFunctions;
+}
 </code></pre>
         </article>
     </section>
@@ -702,13 +820,13 @@ let head = document.head;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="-_.html">_</a></li></ul><h3>Global</h3><ul><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="-_.html">_</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_appendCustom">_appendCustom</a></li><li><a href="global.html#body">body</a></li><li><a href="global.html#head">head</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri May 07 2021 20:06:39 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed May 12 2021 13:51:06 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -12,7 +12,7 @@ Manipulate the DOM easily
 
 SpacerJS is a lightweight JavaScript library that enables you to manipulate elements and the DOM easily.
 
-SpacerJS main file only comes in at ~22kb un-minified and ~8kb minified.
+SpacerJS main file only comes in at ~25kb un-minified and ~9kb minified.
 
 SpacerJS receives frequent updates.
 
@@ -22,7 +22,7 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 
 ## Features
 
-1. Small package at ~6kb minified
+1. Small package at ~9kb minified
 2. Over 55 different methods
 3. Smart selection
 4. Event listeners
@@ -30,13 +30,15 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 6. Animating Elements
 7. Promises
 8. Setting Metadata
-9. Hiding and Showing elements with set metadata
-10. Smart and compact on() event listener
-11. Adding and removing classes.
-12. Great [Docs](https://ksplatdev.github.io/SpacerJS/-_.html)
-13. Easy to follow [examples](examples.md)
-14. [Testing Code](test)
-15. And a **_lot_** more
+9. ESM Module files minified and unminifed for your needs
+10. Add your own custom methods
+11. Hiding and Showing elements with set metadata
+12. Smart and compact on() event listener
+13. Adding and removing classes.
+14. Great [Docs](https://ksplatdev.github.io/SpacerJS/-_.html)
+15. Easy to follow [examples](examples.md)
+16. [Testing Code](test)
+17. And a **_lot_** more
 
 <br>
 
@@ -50,11 +52,13 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 
 ### CDN
 
+**_To get the ESModule version add .esm.js. Ex: [https://cdn.jsdelivr.net/npm/spacerjs@2.1.0/build/Spacer.esm.min.js](https://cdn.jsdelivr.net/npm/spacerjs@2.1.0/build/Spacer.esm.min.js)_**
+
 **Production**
 
 1. Copy paste the following script tag in the body or with the defer attribute
 
-    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@2.0.0/build/Spacer.min.js"></script>`
+    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@2.1.0/build/Spacer.min.js"></script>`
 
 2. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
 
@@ -62,14 +66,14 @@ Since SpacerJS is written in typescript, bugs are rare and SpacerJS can be compa
 
 1. Copy paste the following script tag in the body or with the defer attribute
 
-    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@2.0.0/build/Spacer.js"></script>`
+    `<script src="https://cdn.jsdelivr.net/npm/spacerjs@2.1.0/build/Spacer.js"></script>`
 
 2. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
 
 ### NPM
 
 1. Run `npm install spacerjs`.
-2. Import it as a module.
+2. Import it as a module OR link the script in the body or with the defer attribute.
 3. Done! Be sure to read the [docs](https://ksplatdev.github.io/SpacerJS/-_.html).
 
 <br>
